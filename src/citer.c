@@ -1,7 +1,19 @@
 #include "citer.h"
 
 #include <string.h>
+#include <stdio.h>
 
+
+int iter(void* array, size_t element_size, size_t array_length, BaseIterator* out) {
+    if (NULL == array) { return 0; }
+    
+    out->array = array;
+    out->element_size = element_size;
+    out->array_length = array_length;
+    out->i = 0;
+
+    return 1;
+}
 
 static int base_next(BaseIterator* iterator, void* out) {
     if (NULL == iterator || NULL == out) { return -1; }
@@ -21,12 +33,9 @@ static int base_next(BaseIterator* iterator, void* out) {
     return 1;
 }
 
-/// Get the next element from the iterator.
-/// Result will be in `out` parameter.
-/// Returns 1 if there was an element, 
-///         0 if iteration should stop,
-///         -1 on error.
 int next(void* iterator, IteratorType iterator_type, void* out) {
+    if (NULL == iterator || NULL == out) { return -1; }
+
     switch (iterator_type)
     {
     case BASE_ITERATOR:

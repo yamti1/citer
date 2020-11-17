@@ -3,16 +3,23 @@
 
 #include <stdlib.h>
 
-typedef enum{
+typedef enum {
     BASE_ITERATOR
 } IteratorType;
 
 typedef struct {
-    const void* array;
-    const size_t element_size;
-    const size_t array_length;
+    void* array;
+    size_t element_size;
+    size_t array_length;
     size_t i;
 } BaseIterator;
+
+/// Get an iterator over an array
+/// `element_size` is the size in bytes of each element in the array.
+/// `array_length` is the count of elements in the array.
+/// `out` is the resulted BaseIterator.
+/// Returns 1 if `array` is NULL, 0 otherwise.
+int iter(void* array, size_t element_size, size_t array_length, BaseIterator* out);
 
 /// Get the next element from the iterator.
 /// Result will be in `out` parameter.
