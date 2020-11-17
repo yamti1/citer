@@ -11,6 +11,7 @@ int iter(void* array, size_t element_size, size_t array_length, BaseIterator* ou
     out->element_size = element_size;
     out->array_length = array_length;
     out->i = 0;
+    out->increment = 1;
 
     return 1;
 }
@@ -18,7 +19,8 @@ int iter(void* array, size_t element_size, size_t array_length, BaseIterator* ou
 static int base_next(BaseIterator* iterator, void* out) {
     if (NULL == iterator || NULL == out) { return -1; }
 
-    if (iterator->i >= iterator->array_length) { 
+    if ((iterator->increment > 0 && iterator->i >= iterator->array_length) ||
+        (iterator->increment < 0 && iterator->i <= 0)) { 
         // Iteration is over
         return 0; 
     }
@@ -28,7 +30,7 @@ static int base_next(BaseIterator* iterator, void* out) {
     const char* element_ptr = array + ((iterator->i) * (iterator->element_size));
     memcpy(out, element_ptr, iterator->element_size);
 
-    (iterator->i)++;
+    (iterator->i) += (iterator->increment);
     
     return 1;
 }
@@ -39,6 +41,7 @@ int next(void* iterator, IteratorType iterator_type, void* out) {
     switch (iterator_type)
     {
     case BASE_ITERATOR:
+    case REVERSED_ITERATOR:
         return base_next((BaseIterator*) iterator, out);
     
     default:
