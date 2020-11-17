@@ -4,16 +4,22 @@
 #include <stdio.h>
 
 
-int iter(void* array, size_t element_size, size_t array_length, BaseIterator* out) {
-    if (NULL == array) { return 0; }
-    
-    out->array = array;
-    out->element_size = element_size;
-    out->array_length = array_length;
-    out->i = 0;
-    out->increment = 1;
+BaseIterator iter(void* array, size_t element_size, size_t array_length) {
+    if (NULL == array) { 
+        printf("Warning: Iterating over a NULL array!");
+        BaseIterator iterator;
+        return iterator;
+    }
 
-    return 1;
+    BaseIterator iterator = {
+        .array = array,
+        .element_size = element_size,
+        .array_length = array_length,
+        .i = 0,
+        .increment = 1
+    };
+
+    return iterator;
 }
 
 static int base_next(BaseIterator* iterator, void* out) {

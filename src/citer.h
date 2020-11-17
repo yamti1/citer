@@ -4,7 +4,8 @@
 #include <stdlib.h>
 
 typedef enum {
-    BASE_ITERATOR
+    BASE_ITERATOR,
+    REVERSED_ITERATOR
 } IteratorType;
 
 typedef struct {
@@ -12,6 +13,7 @@ typedef struct {
     size_t element_size;
     size_t array_length;
     size_t i;
+    int increment;
 } BaseIterator;
 
 /// Get an iterator over an array
@@ -19,7 +21,7 @@ typedef struct {
 /// `array_length` is the count of elements in the array.
 /// `out` is the resulted BaseIterator.
 /// Returns 1 if `array` is NULL, 0 otherwise.
-int iter(void* array, size_t element_size, size_t array_length, BaseIterator* out);
+BaseIterator iter(void* array, size_t element_size, size_t array_length);
 
 /// Get the next element from the iterator.
 /// Result will be in `out` parameter.
