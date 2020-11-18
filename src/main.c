@@ -5,7 +5,7 @@
 
 int main() {
     int my_array[4] = {1, 2, 3, 5};
-    BaseIterator iterator = iter(my_array, sizeof(int), 4);
+    BaseIterator iterator = reversed(my_array, sizeof(int), 4);
 
     int element = 0;
     while (next(&iterator, BASE_ITERATOR, &element)) {

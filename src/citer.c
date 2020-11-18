@@ -22,11 +22,19 @@ BaseIterator iter(void* array, size_t element_size, size_t array_length) {
     return iterator;
 }
 
+BaseIterator reversed(void* array, size_t element_size, size_t array_length) {
+    BaseIterator iterator = iter(array, element_size, array_length);
+    iterator.increment = -1;
+    iterator.i = array_length - 1;
+
+    return iterator;
+}
+
 static int base_next(BaseIterator* iterator, void* out) {
     if (NULL == iterator || NULL == out) { return -1; }
 
     if ((iterator->increment > 0 && iterator->i >= iterator->array_length) ||
-        (iterator->increment < 0 && iterator->i <= 0)) { 
+        (iterator->increment < 0 && iterator->i < 0)) { 
         // Iteration is over
         return 0; 
     }
