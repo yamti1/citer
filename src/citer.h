@@ -43,15 +43,14 @@ BaseIterator iter(void* array, size_t element_size, size_t array_length);
 BaseIterator reversed(void* array, size_t element_size, size_t array_length);
 
 /// Get an iterator that only allows items that pass the filter.
-/// Gets elements from the `undelying_iterator` and calls `filter_function_ptr` with each.
+/// Gets elements from the `underlying_iterator` and calls `filter_function_ptr` with each.
 /// If the result is true returns that element. Otherwise moves to the next one.
 FilterIterator filter(FilterFunctionPtr filter_function_ptr, IteratorType underlying_iterator_type, void* underlying_iterator);
 
 /// Get the next element from the iterator.
 /// Result will be in `out` parameter.
 /// Returns 1 if there was an element, 
-///         0 if iteration should stop.
-///         -1 on error.
+///         0 if iteration should stop or on error.
 int next(void* iterator, IteratorType iterator_type, void* out);
 
 #endif
