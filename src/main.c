@@ -10,7 +10,7 @@ int is_even(void* value_ptr) {
 
 int main() {
     int my_array[] = {1, 2, 3, 5, 6, 10, 11, 29};
-    BaseIterator iterator1 = reversed(my_array, sizeof(int), 8);
+    ReversedIterator iterator1 = reversed(my_array, sizeof(int), 8);
     FilterIterator iterator2 = filter(&is_even, REVERSED_ITERATOR, &iterator1);
 
     int element = 0;

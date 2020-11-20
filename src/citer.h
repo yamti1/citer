@@ -17,6 +17,7 @@ typedef struct {
     int increment;
 } BaseIterator;
 
+typedef BaseIterator ReversedIterator;
 
 typedef struct {
     void* iterator;
