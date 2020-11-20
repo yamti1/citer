@@ -33,24 +33,25 @@ BaseIterator reversed(void* array, size_t element_size, size_t array_length) {
 FilterIterator filter(
     FilterFunctionPtr filter_function_ptr,
     IteratorType underlying_iterator_type,
-    void* underlying_iterator) {
-        if (NULL == filter_function_ptr) {
-            printf("Warning: NULL filter function!");
-            FilterIterator iterator;
-            return iterator;
-        }
-
-        UnderlyinIterator _iterator = {
-            .iterator = underlying_iterator,
-            .iterator_type = underlying_iterator_type
-        };
-
-        FilterIterator iterator = {
-            .filter_function_ptr = filter_function_ptr,
-            .underlying_iterator = _iterator
-        };
-
+    void* underlying_iterator
+) {
+    if (NULL == filter_function_ptr) {
+        printf("Warning: NULL filter function!");
+        FilterIterator iterator;
         return iterator;
+    }
+
+    UnderlyinIterator _iterator = {
+        .iterator = underlying_iterator,
+        .iterator_type = underlying_iterator_type
+    };
+
+    FilterIterator iterator = {
+        .filter_function_ptr = filter_function_ptr,
+        .underlying_iterator = _iterator
+    };
+
+    return iterator;
 }
 
 static int base_next(BaseIterator* iterator, void* out) {
@@ -106,7 +107,8 @@ int next(void* iterator, IteratorType iterator_type, void* out) {
     case FILTER_ITERATOR:
         return filter_next((FilterIterator*) iterator, out);
     default:
-        return -1;
+        printf("Warning: Invalid iterator type %i\n", iterator_type);
+        return 0;
     }
 }
 
