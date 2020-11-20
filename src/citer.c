@@ -30,6 +30,29 @@ BaseIterator reversed(void* array, size_t element_size, size_t array_length) {
     return iterator;
 }
 
+FilterIterator filter(
+    FilterFunctionPtr filter_function_ptr,
+    IteratorType underlying_iterator_type,
+    void* underlying_iterator) {
+        if (NULL == filter_function_ptr) {
+            printf("Warning: NULL filter function!");
+            FilterIterator iterator;
+            return iterator;
+        }
+
+        UnderlyinIterator _iterator = {
+            .iterator = underlying_iterator,
+            .iterator_type = underlying_iterator_type
+        };
+
+        FilterIterator iterator = {
+            .filter_function_ptr = filter_function_ptr,
+            .underlying_iterator = _iterator
+        };
+
+        return iterator;
+}
+
 static int base_next(BaseIterator* iterator, void* out) {
     if (NULL == iterator || NULL == out) { return -1; }
 
@@ -49,6 +72,28 @@ static int base_next(BaseIterator* iterator, void* out) {
     return 1;
 }
 
+static int filter_next(FilterIterator* iterator, void* out) {
+    if (NULL == iterator || NULL == out) { return -1; }
+
+    while (1)
+    {
+        int should_continue = next(
+            iterator->underlying_iterator.iterator,
+            iterator->underlying_iterator.iterator_type,
+            out
+        );
+
+        if (!should_continue) {
+            return should_continue;
+        }
+
+        if ((*iterator->filter_function_ptr)(out)) {
+            // Element passed the filter
+            return 1;
+        }
+    }
+}
+
 int next(void* iterator, IteratorType iterator_type, void* out) {
     if (NULL == iterator || NULL == out) { return -1; }
 
@@ -57,7 +102,9 @@ int next(void* iterator, IteratorType iterator_type, void* out) {
     case BASE_ITERATOR:
     case REVERSED_ITERATOR:
         return base_next((BaseIterator*) iterator, out);
-    
+
+    case FILTER_ITERATOR:
+        return filter_next((FilterIterator*) iterator, out);
     default:
         return -1;
     }
